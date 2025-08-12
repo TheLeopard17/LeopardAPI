@@ -1,0 +1,50 @@
+openapi: 3.1.0
+info:
+  title: Leopard API
+  version: 1.0.0
+servers:
+  - url: http://api.leopardservice.eu/v1
+  - url: http://localhost:8080/v1
+security:
+  - bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      summary: Login con codice operatore + PIN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [operatorCode, pin]
+              properties:
+                operatorCode: { type: string }
+                pin: { type: string }
+      responses:
+        "200": { description: OK }
+  /webspace/hosting:
+    get:
+      summary: Elenco hosting (cache Plesk)
+      parameters:
+        - in: query
+          name: domain
+          schema: { type: string }
+      responses:
+        "200": { description: OK }
+  /webspace/hosting/sync:
+    post:
+      summary: Sincronizza da Plesk per una company
+      parameters:
+        - in: query
+          name: companyId
+          required: true
+          schema: { type: string }
+      responses:
+        "200": { description: OK }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
