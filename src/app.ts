@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import pino from 'pino';
 import pinoHttp from 'pino-http';
+import authRouter from './routes/auth';
+import authenticateToken from './middleware/auth';
 
 const logger = pino({ name: 'leopard-api' });
 
