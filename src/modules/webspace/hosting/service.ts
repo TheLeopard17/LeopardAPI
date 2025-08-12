@@ -3,7 +3,7 @@ import WebspaceHosting from './model';
 export async function upsertHosting(items: any[], companyId: string) {
   const ops = items.map(it => ({
     updateOne: {
-      filter: { pleskId: String(it.id) },
+      filter: { companyId, pleskId: String(it.id) },
       update: {
         $set: {
           pleskId: String(it.id),

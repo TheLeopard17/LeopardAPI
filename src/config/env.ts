@@ -22,5 +22,6 @@ export const env = {
     baseUrl: required('PLESK_BASE_URL', process.env.PLESK_BASE_URL),
     username: required('PLESK_USERNAME', process.env.PLESK_USERNAME),
     password: required('PLESK_PASSWORD', process.env.PLESK_PASSWORD),
+    apiToken: process.env.PLESK_API_TOKEN,
   }
 };

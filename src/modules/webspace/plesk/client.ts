@@ -1,12 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 import https from "https";
+import { env } from "../../../config/env";
 
-const baseURL = process.env.PLESK_BASE_URL!;
-const PLESK_API_TOKEN = process.env.PLESK_API_TOKEN || "";
-const PLESK_BASIC_USER = process.env.PLESK_BASIC_USER || "";
-const PLESK_BASIC_PASS = process.env.PLESK_BASIC_PASS || "";
-
-const httpsAgent = new https.Agent({ rejectUnauthorized: false }); // solo DEV
+const httpsAgent = env.nodeEnv === 'development'
+  ? new https.Agent({ rejectUnauthorized: false })
+  : undefined;
 
 export type DomainWithStatus = {
   pleskId: string;
@@ -16,9 +14,9 @@ export type DomainWithStatus = {
 };
 
 function headerStrategy(): Record<string,string> {
-  if (PLESK_API_TOKEN) return { Authorization: `Bearer ${PLESK_API_TOKEN}` };
-  if (PLESK_BASIC_USER && PLESK_BASIC_PASS) {
-    const b64 = Buffer.from(`${PLESK_BASIC_USER}:${PLESK_BASIC_PASS}`).toString("base64");
+  if (env.plesk.apiToken) return { Authorization: `Bearer ${env.plesk.apiToken}` };
+  if (env.plesk.username && env.plesk.password) {
+    const b64 = Buffer.from(`${env.plesk.username}:${env.plesk.password}`).toString("base64");
     return { Authorization: `Basic ${b64}` };
   }
   return {};
@@ -26,9 +24,13 @@ function headerStrategy(): Record<string,string> {
 
 async function pleskGet<T=any>(url: string, cfg: Partial<AxiosRequestConfig> = {}) {
   const res = await axios.request<T>({
-    baseURL, url, method: "GET",
+    baseURL: env.plesk.baseUrl,
+    url,
+    method: "GET",
     headers: { Accept: "application/json", "Content-Type": "application/json", ...headerStrategy(), ...(cfg.headers||{}) },
-    httpsAgent, timeout: 20000, ...cfg
+    httpsAgent,
+    timeout: 20000,
+    ...cfg
   });
   return res.data as T;
 }

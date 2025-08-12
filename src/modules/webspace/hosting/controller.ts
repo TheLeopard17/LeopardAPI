@@ -7,7 +7,7 @@ import { listDomainsWithStatus } from "../plesk/client";
  */
 export async function getList(req: Request, res: Response) {
   try {
-    const companyId = String(req.query.companyId || "");
+    const companyId = String((req as any).companyId || "");
     if (!companyId) return res.status(400).json({ error: "companyId is required" });
 
     const q = String(req.query.q || "").trim();
@@ -37,7 +37,7 @@ export async function getList(req: Request, res: Response) {
  */
 export async function syncNow(req: Request, res: Response) {
   try {
-    const companyId = String(req.query.companyId || "");
+    const companyId = String((req as any).companyId || "");
     if (!companyId) return res.status(400).json({ error: "companyId is required" });
 
     const items = await listDomainsWithStatus(10);

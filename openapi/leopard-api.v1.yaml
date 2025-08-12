@@ -28,8 +28,23 @@ paths:
       summary: Elenco hosting (cache Plesk)
       parameters:
         - in: query
-          name: domain
+          name: companyId
+          required: true
           schema: { type: string }
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [attivo, sospeso, in_attivazione, unknown]
+        - in: query
+          name: page
+          schema: { type: integer }
+        - in: query
+          name: pageSize
+          schema: { type: integer }
       responses:
         "200": { description: OK }
   /webspace/hosting/sync:
