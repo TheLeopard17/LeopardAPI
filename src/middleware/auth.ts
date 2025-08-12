@@ -18,7 +18,7 @@ export default function authenticateToken(
     return;
   }
 
-  const secret = process.env.JWT_SECRET || 'secret';
+  const secret = process.env.JWT_SECRET as string;
   jwt.verify(token, secret, (err, user) => {
     if (err) {
       res.sendStatus(403);
