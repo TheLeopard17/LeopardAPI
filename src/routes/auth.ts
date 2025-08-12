@@ -32,6 +32,10 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const user = users.find((u) => u.username === username);
+  if (!username || !password) {
+    res.status(400).json({ message: 'Username and password required' });
+    return;
+  }
   if (!user) {
     res.status(400).json({ message: 'Cannot find user' });
     return;
